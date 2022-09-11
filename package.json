@@ -1,0 +1,22 @@
+{
+  "name": "rncryptor",
+  "version": "0.1.0",
+  "description": "JavaScript implementation of RNCryptor",
+  "keywords": [
+    "rncryptor"
+  ],
+  "homepage": "https://github.com/unseb/node-rncryptor#readme",
+  "bugs": {
+    "url": "https://github.com/unseb/node-rncryptor/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Mumtaz Aziz",
+    "email": "mumtazaziz020305@gmail.com"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unseb/node-rncryptor.git"
+  }
+}
