@@ -1,6 +1,6 @@
 {
   "name": "rncryptor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript implementation of RNCryptor",
   "keywords": [
     "rncryptor"
@@ -18,5 +18,16 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/unseb/node-rncryptor.git"
+  },
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

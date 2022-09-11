@@ -1,8 +1,12 @@
-const assert = require('assert/strict');
-const { Transform } = require('stream');
-const { errors: { ERR_INVALID_CREDETIAL_TYPE, ERR_MESSAGE_TOO_SHORT, ERR_UNKNOWN_HEADER } } = require('./lib/internal');
-const v2 = require('./lib/v2');
-const v3 = require('./lib/v3');
+const assert = require("assert/strict");
+const { Transform } = require("stream");
+const {
+  ERR_INVALID_CREDETIAL_TYPE,
+  ERR_MESSAGE_TOO_SHORT,
+  ERR_UNKNOWN_HEADER,
+} = require("./lib/internal/errors").codes;
+const v2 = require("./lib/v2");
+const v3 = require("./lib/v3");
 function createKeyBasedEncryptor(encryptionKey, hmacKey, options) {
   return new v3.Encryptor({ encryptionKey, hmacKey }, options);
 }
@@ -15,7 +19,10 @@ class Decryptor extends Transform {
   #engine;
   constructor(credential, options) {
     super(options);
-    assert('encryptionKey' in credential || 'password' in credential, ERR_INVALID_CREDETIAL_TYPE);
+    assert(
+      "encryptionKey" in credential || "password" in credential,
+      new ERR_INVALID_CREDETIAL_TYPE()
+    );
     this.#credential = credential;
   }
   _transform(chunk, encoding, callback) {
@@ -32,30 +39,35 @@ class Decryptor extends Transform {
   }
   update(data, inputEncoding, outputEncoding) {
     if (!this.#engine) this.#determineEngine(data, inputEncoding);
-    if (this.#engine) return this.#engine.update(data, inputEncoding, outputEncoding);
+    if (this.#engine)
+      return this.#engine.update(data, inputEncoding, outputEncoding);
     return Buffer.alloc(0);
   }
   final(outputEncoding) {
-    assert(this.#engine, ERR_MESSAGE_TOO_SHORT);
+    assert(this.#engine, new ERR_MESSAGE_TOO_SHORT());
     return this.#engine.final(outputEncoding);
   }
   #determineEngine(preamble, inputEncoding) {
     this.#engines = this.#engines.filter((engine) => {
       try {
-        return engine.isCompatible(preamble, inputEncoding);
+        return engine.canDecrypt(preamble, inputEncoding);
       } catch (e) {
-        return true
+        return true;
       }
-    })
-    assert(this.#engines.length, ERR_UNKNOWN_HEADER)
-    if (this.#engines.length === 1 && this.#engines[0].isCompatible(preamble, inputEncoding)) this.#engine = new this.#engines[0](this.#credential)
+    });
+    assert(this.#engines.length, new ERR_UNKNOWN_HEADER());
+    if (
+      this.#engines.length === 1 &&
+      this.#engines[0].canDecrypt(preamble, inputEncoding)
+    )
+      this.#engine = new this.#engines[0](this.#credential);
   }
 }
 function createPasswordBasedDecryptor(password, options) {
-  return new Decryptor({ password }, options)
+  return new Decryptor({ password }, options);
 }
 function createKeyBasedDecryptor(encryptionKey, hmacKey, options) {
-  return new Decryptor({ encryptionKey, hmacKey }, options)
+  return new Decryptor({ encryptionKey, hmacKey }, options);
 }
 module.exports = {
   createKeyBasedDecryptor,
@@ -63,5 +75,5 @@ module.exports = {
   createPasswordBasedDecryptor,
   createPasswordBasedEncryptor,
   v2,
-  v3
-}
+  v3,
+};
