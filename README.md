@@ -57,5 +57,7 @@ const {
 
 - Migrate to TypeScript
 - Add inline JSDoc
+- Create browser supported builds
+- Support older Node.js versions
 - Add unit tests
-- Add v4 support
+- Add v4 format support
