@@ -14,31 +14,31 @@ JavaScript implementation of RNCryptor
 This package attempts to emulate the Node.js crypto API. You can see how similar `createPasswordEncryptor` is to `createCipheriv`:
 
 ```javascript
-const { createPasswordBasedEncryptor } = require("rncryptor");
+const { createPasswordBasedEncryptor } = require('rncryptor')
 
-const original = "The quick brown fox jumps over a lazy dog. 1234567890";
-const password = "123456";
+const original = 'The quick brown fox jumps over a lazy dog. 1234567890'
+const password = '123456'
 
-const encryptor = createPasswordBasedEncryptor(password);
+const encryptor = createPasswordBasedEncryptor(password)
 
-let encrypted = encryptor.update(original, "utf-8", "hex");
-encrypted += encryptor.final("hex");
+let encrypted = encryptor.update(original, 'utf-8', 'hex')
+encrypted += encryptor.final('hex')
 
-console.log(encrypted);
+console.log(encrypted)
 ```
 
 This also applies to the corresponding decryptors:
 
 ```javascript
 // ...
-const { createPasswordBasedDecryptor } = require("rncryptor");
+const { createPasswordBasedDecryptor } = require('rncryptor')
 
-const decryptor = createPasswordBasedDecryptor(password);
+const decryptor = createPasswordBasedDecryptor(password)
 
-let decrypted = decryptor.update(encrypted, "hex", "utf-8");
-decrypted += decryptor.final("utf-8");
+let decrypted = decryptor.update(encrypted, 'hex', 'utf-8')
+decrypted += decryptor.final('utf-8')
 
-console.log(decrypted);
+console.log(decrypted)
 // Prints: The quick brown fox jumps over a lazy dog. 1234567890
 ```
 
@@ -48,9 +48,9 @@ By default, RNCryptor uses the latest format version when encrypting and automat
 
 ```javascript
 const {
-  createPasswordBasedEncryptor
+  createPasswordBasedEncryptor,
   createPasswordBasedDecryptor
-} = require("rncryptor").v2;
+} = require("rncryptor").v2
 ```
 
 ## Todos
@@ -59,5 +59,4 @@ const {
 - Add inline JSDoc
 - Create browser supported builds
 - Support older Node.js versions
-- Add unit tests
 - Add v4 format support
